@@ -123,5 +123,22 @@ body {
   margin: 3px 0 10px;
 }
 
+.card-info {
+  width: 100%;
+}
 
+span {
+  text-decoration: underline;
+  cursor: pointer;
+  position: relative;
+  left: 30%;
+  top: 10px;
+}
 
+.span-click {
+  height: 400px;
+}
+
+/* .graph {
+  display: none;
+} */

@@ -4,7 +4,7 @@
     https://api.github.com/users/<your name>
 */
 
-axios.get('https://api.github.com/users/chiku524')
+axios.get('https://cors-anywhere.herokuapp.com/https://api.github.com/users/chiku524')
   .then(function(response){
     console.log(response);
     let info = infoOrganizer(response.data);
@@ -16,7 +16,6 @@ axios.get('https://api.github.com/users/chiku524')
   .catch(function(error){
     console.log(error);
   })
-
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -45,9 +44,8 @@ axios.get('https://api.github.com/users/chiku524')
 const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
 
 followersArray.forEach(element => {
-  axios.get(`https://api.github.com/users/${element}`)
+  axios.get(`https://cors-anywhere.herokuapp.com/https://api.github.com/users/${element}`)
     .then(function(response){
-      console.log(response);
       let info = infoOrganizer(response.data);
       return info;
     })
@@ -59,6 +57,29 @@ followersArray.forEach(element => {
     })
 })
 
+  axios.get('https://cors-anywhere.herokuapp.com/https://api.github.com/users/chiku524/followers')
+    .then(function(response){
+      let followers = response.data;
+      return followers;
+    })
+    .then(function(followers){
+      followers.forEach(element => {
+        axios.get(`https://cors-anywhere.herokuapp.com/https://api.github.com/users/${element.login}`)
+          .then(function(response){
+            let followersInfo = infoOrganizer(response.data);
+            return followersInfo;
+          })
+          .then(function(followersInfo){
+            cards.appendChild(followersInfo);
+          })
+          .catch(function(error){
+            console.log(error);
+          })
+      })
+    })
+    .catch(function(error){
+      console.log(error);
+    })
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
@@ -94,24 +115,13 @@ function infoOrganizer(object){
   let followers = document.createElement('p');
   let following = document.createElement('p');
   let bio = document.createElement('p');
+  let expand = document.createElement('span');
 
   //add classes
   card.classList.add('card');
   cardInfo.classList.add('card-info');
   name.classList.add('name');
   username.classList.add('username');
-
-  //structuring the html with appendChild
-  card.appendChild(image);
-  card.appendChild(cardInfo);
-  cardInfo.appendChild(name);
-  cardInfo.appendChild(username);
-  cardInfo.appendChild(location);
-  cardInfo.appendChild(profile);
-  profile.appendChild(anchorTag);
-  cardInfo.appendChild(followers);
-  cardInfo.appendChild(following);
-  cardInfo.appendChild(bio);
 
   //giving textContent and whatnot
   image.src = object.avatar_url;
@@ -124,10 +134,53 @@ function infoOrganizer(object){
   followers.textContent = `Followers: ${object.followers}`;
   following.textContent = `Following: ${object.following}`;
   bio.textContent = `Bio: ${object.bio}`; 
+  expand.textContent = 'Expand';
+  
+  //structuring the html with appendChild
+  card.appendChild(image);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(username);
+  cardInfo.appendChild(location);
+  profile.appendChild(anchorTag);
+  cardInfo.appendChild(profile);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+  cardInfo.appendChild(expand);
 
-  console.log(card);
+  // stretch
+  // let graph = document.createElement('img');
+  // graph.classList.add('graph');
+  // cardInfo.appendChild(graph);
+  // axios.get(`https://cors-anywhere.herokuapp.com/https://github.com/users/chiku524/contributions`)
+  //   .then(function(response){
+  //     console.log(response)
+  //   })
+  //   .catch(function(error){
+  //     console.log(error);
+  //   })
+
+  // graph.data = `https://github.com/users/${object.login}/contributions?to=2020-05-11`;
+
+  expand.addEventListener('click', expandDiv);
+  function expandDiv(event){
+    card.classList.toggle('span-click');
+    if(card.classList[1] === 'span-click'){
+      expand.textContent = 'Collapse';
+      //graph.style.display = 'block';
+    } else {
+      expand.textContent = 'Expand';
+      //graph.style.display = 'none';
+    }
+  }
+
+  //graph.style.display = 'none';
+
   return card;
 }
+
+
 
 /*
   List of LS Instructors Github username's:
