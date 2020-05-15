@@ -116,6 +116,8 @@ function infoOrganizer(object){
   let following = document.createElement('p');
   let bio = document.createElement('p');
   let expand = document.createElement('span');
+  let hireable = document.createElement('p');
+  let reposNum = document.createElement('p');
 
   //add classes
   card.classList.add('card');
@@ -135,6 +137,8 @@ function infoOrganizer(object){
   following.textContent = `Following: ${object.following}`;
   bio.textContent = `Bio: ${object.bio}`; 
   expand.textContent = 'Expand';
+  hireable.textContent = `Hireable: ${object.hireable}`;
+  reposNum.textContent = `Number of repositories: ${object.public_repos}`;
   
   //structuring the html with appendChild
   card.appendChild(image);
@@ -148,6 +152,8 @@ function infoOrganizer(object){
   cardInfo.appendChild(following);
   cardInfo.appendChild(bio);
   cardInfo.appendChild(expand);
+  cardInfo.appendChild(hireable);
+  cardInfo.appendChild(reposNum);
 
   // stretch
   // let graph = document.createElement('img');
@@ -169,13 +175,19 @@ function infoOrganizer(object){
     if(card.classList[1] === 'span-click'){
       expand.textContent = 'Collapse';
       //graph.style.display = 'block';
+      hireable.style.display = 'block';
+      reposNum.style.display = 'block';
     } else {
       expand.textContent = 'Expand';
       //graph.style.display = 'none';
+      hireable.style.display = 'none';
+      reposNum.style.display = 'none';
     }
   }
 
   //graph.style.display = 'none';
+  hireable.style.display = 'none';
+  reposNum.style.display = 'none';
 
   return card;
 }
